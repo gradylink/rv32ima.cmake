@@ -80,7 +80,6 @@ if(DEFINED DTB AND NOT "${DTB}" STREQUAL "")
   math(EXPR DTB_LEN "${_dtb_hexlen} / 2")
   unset(_dtb)
 
-  # end of RAM, page aligned (also satisfies Linux's 8-byte DTB alignment)
   math(EXPR DTB_OFF "(${RAM_SIZE} - ${DTB_LEN}) & ~(${PAGE_BYTES} - 1)")
   math(EXPR DTB_PAGE "${DTB_OFF} >> ${PAGE_SHIFT}")
   math(EXPR DTB_ADDR "${RAM_BASE} + ${DTB_OFF}")
@@ -335,9 +334,9 @@ macro(mem_load addr width sgn out)
     ram_read_le(${_moff} ${_mbytes} _mv)
     if(${sgn})
       if(${width} EQUAL 0 AND ${_mv} GREATER 127)
-        math(EXPR _mv "${_mv} + 4294967040")   # | 0xFFFFFF00
+        math(EXPR _mv "${_mv} + 4294967040") # | 0xFFFFFF00
       elseif(${width} EQUAL 1 AND ${_mv} GREATER 32767)
-        math(EXPR _mv "${_mv} + 4294901760")   # | 0xFFFF0000
+        math(EXPR _mv "${_mv} + 4294901760") # | 0xFFFF0000
       endif()
     endif()
   endif()
